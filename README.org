@@ -95,7 +95,7 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
 ** Dir
 
 * Bus
-
+  总线协议参见：[[bus_protocol.org]]
 ** Bus master
    总线主设备驱动
 

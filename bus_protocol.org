@@ -1,0 +1,73 @@
+#+OPTIONS: ^:{}
+
+#+TITLE: Conwin Bus Protocol
+#+AUTHOR: fanwenjie
+
+** Overview
+  丛文485总线用于报警主机/网络模块及扩展设备之间的通信
+** 总线规格
+   - 总线由4根线组成 : 485+, 485-, GND, +12V
+   - 建议线缆规格    : xxxx
+   - 总线最大节点数  ：32
+   - 总线长度        : XXX米
+   - 总线速率        : 19200
+   - 通信参数        : none,8,1
+   - 从设备须具备地址设定功能
+
+** 数据帧结构
+   <STX> = 0x02
+   <ETX> = 0x03
+   <GS> = 0x1D
+   <US> = 0x1F
+   
+   <stream>  = <PACKAGE>|<TOKEN>|<PACKAGE>|...
+   <TOKEN>   = 11caaaaa
+                 c =  0 - 交付总线控制权
+                      1  - 交还总线控制权
+                 aaaaa = 0 - 32 总线地址
+                 
+   设备必须拿到总线控制权，才可以向总线发送数据，数据发送完成后必须发送交还总线控制权指令
+   <PACKAGE>  = <STX><TYPE><PACKAGE DATA><ETX>
+   <TYPE> = 'q'  <PACKAGE DATA> = <REQUEST>
+            'r'  <PACKAGE DATA> = <RESPONSE>
+            'm'  <PACKAGE DATA> = <MESSAGE>
+ 
+   <MESSAGE>  = <DST><SRC><MESSAGE CONTENT><us><CRC>
+   <REQUEST>  = <DST><SRC><REQ ID><PATH>[<US><PARAM>[<US><HEADER>]]<US><CRC>
+   <RESPONSE> = <DST><SRC><REQ ID><CODE>[<US><BODY>[<US><HEADER>]]<US><CRC>
+   注: RESPONSE中的<REQ ID>应该为对应REQUEST中的<REQ ID>
+   
+   <SRC>  = <设备地址>
+   <DST>  = <设备地址>
+   <CRC>  = <hex string>  // 从<STX>(不含)起至<CRC>(不含)之前的所有数据的CRC16校验值，详见<<CRC16计算方法>>
+                          // 校验值以16进制ascii发送
+                          // 例如, 校验值为0x55a3时,发送"55A3"
+
+** 设备地址定义
+   - 设备地址总数为32
+   - 地址0  为默认主控设备
+   - 地址32 为广播地址
+   - 地址表达形式有两种：
+     * 形式1：5位二进制
+     * 形式2：字母'@' 开始的31个ascii字母。
+   在token中使用形式1， 在package中使用形式2
+
+** CRC16计算方法
+#+BEGIN_SRC c
+unsigned short crc16(const void *data, unsigned short sizeInByte)
+{
+    unsigned short crc=0;
+    unsigned char *p = (unsigned char *)data;
+
+    while (sizeInByte--)
+    {
+        unsigned char i;
+        crc ^= *p++;
+        for (i = 0; i<8; i++) 
+        {
+            crc = (crc >> 1) ^ ((crc & 0x01) ? 0xA001 : 0);
+        }
+    }
+    return crc;
+}
+#+END_SRC
