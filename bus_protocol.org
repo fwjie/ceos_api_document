@@ -18,8 +18,8 @@
 #+BEGIN_SRC 
    <STX> = 0x02
    <ETX> = 0x03
-   <GS> = 0x1D
-   <US> = 0x1F
+   <GS>  = 0x1D
+   <US>  = 0x1F
    
    <stream>  = <PACKAGE>|<TOKEN>|<PACKAGE>|...
    <TOKEN>   = 11caaaaa
@@ -43,7 +43,7 @@
    <CRC>  = <hex string>  // 从<STX>(不含)起至<CRC>(不含)之前的所有数据的CRC16校验值，详见<<CRC16计算方法>>
                           // 校验值以16进制ascii发送
                           // 例如, 校验值为0x55a3时,发送"55A3"
-
+#+END_SRC
 ** 设备地址定义
    - 设备地址总数为32
    - 地址0  为默认主控设备
@@ -52,7 +52,6 @@
      * 形式1：5位二进制
      * 形式2：字母'@' 开始的31个ascii字母。
    在token中使用形式1， 在package中使用形式2
-#+END_SRC
 
 ** CRC16计算方法
 #+BEGIN_SRC c

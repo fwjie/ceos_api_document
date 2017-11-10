@@ -43,8 +43,9 @@ TObject库，提供JSON对像操作方法，以及和字符串之间的相互转
 ** Dir
 
 * Bus
-总线协议参见：[[bus_protocol.org][丛文设备总线协议文档]]
-bus分为master和slave，api参见：[[bus_api.org][bus驱动API]]
+  总线协议参见：[[bus_protocol.org][丛文设备总线协议文档]]
+
+  bus驱动分为master和slave，api参见：[[bus_api.org][bus驱动API]]
 * Net
 ** Enthernet
    W5500有线网络驱动
