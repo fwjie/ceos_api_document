@@ -24,6 +24,7 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
    系统基本对像，每一个需要loop的模块都应该继承Task类。
    - 类定义 task.h
    - 提供方法:
+     #+BEGIN_QUOTE
      #+BEGIN_SRC 
      i8 running();                       //判断Task是否运行
      void pause();                       //挂起Task运行
@@ -34,14 +35,15 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
      void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer)
      
      #+END_SRC
+     #+END_QUOTE
    - 使用方法
      1) 继承Task，构造方法必须指定父类和名称
      2) 在setup方法中执行父类的setup方法，
      3) override loop方法
    - 使用示例
      
-#+BEGIN_QUOTE
-   #+BEGIN_SRC c++
+   #+BEGIN_QUOTE
+   #+BEGIN_SRC c
    //类定义
    class Bus: public Task {
      private:
