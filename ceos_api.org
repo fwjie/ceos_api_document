@@ -87,11 +87,27 @@ if (t_100ms->timeup()) {
    - 头文件: hard_timer.h
    - 使用接口
 #+BEGIN_SRC c
+    typedef enum {
+        TIMER_10us = 0,
+        TIMER_1ms,
+        TIMER_1s,
+    } TIMER_PRECISION;
+    
+    typedef void (Hard_timer_callback)(Hard_timer*, void *context);
 
+    Hard_timer(TIMER_PRECISION precision, i16 interval, i16 countdown,
+          Hard_timer_callback *cb, void* context);
+    ~Hard_timer();
+    void start();
+    void stop();
 #+END_SRC
    - 使用示例
-#+BEGIN_SRC 
-
+#+BEGIN_SRC c
+    void timer_bus485_10us_isr(Hard_timer* timer, void *bus)
+    {
+        ((Bus*)bus)->timer_10us_isr();
+    };
+    new Hard_timer(TIMER_10us, 1, -1, &timer_bus485_10us_isr, this);
 #+END_SRC
 ** Queue
    循环对像，提供以字节为单位的队列类型和以void *为单位的队列类型。
@@ -115,7 +131,7 @@ if (t_100ms->timeup()) {
     u16 length();             //返回队列容量
 #+END_SRC
    - 使用示例
-#+BEGIN_SRC 
+#+BEGIN_SRC c
     tx_fifo    = new Byte_queue(TX_FIFO_SIZE);  //创建发送队列
     rx_fifo    = new Byte_queue(RX_FIFO_SIZE);  //创建接收队列
     send_queue = new Void_queue(PACKAGE_QUEUE_LEN); //创建数据包队列
