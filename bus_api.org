@@ -4,7 +4,146 @@
 #+AUTHOR: fanwenjie
 
 * Overview
+  *丛文总线协议的特性:*
+  - 最大支持30个设备
+  - 采用Token机制，Master高速令牌轮循在线设备，保证各设备具备同等的总线使用权
+  - Master令牌分发和数据通信双缓冲，保证数据优先发送
+  - 支持设备热插拔，设备增减，皆无需重启，通信协议自适应以提高通信效率
+  *总线通信流程:*
+  =========  master  =====  bus  =======  slave  =========
+  .                          ^^
+  .                          ||
+  .          token   ---->   ||
+  .                          ||  ------>  token 
+  .                          ||  <------  token (slave无数据直接应答token)
+  .          token  <-----   ||
+  .                          ||
+  .          token   ---->   ||
+  .                          ||  ------>  token
+  .                          ||  <------  data  (slave发送数据)
+  .                          ||  <------  token (归还token)
+  .          token  <-----   ||
+  .                          ||
+  .          token   ---->   ||
+  .                          ||
+  .        <timeout>         ||           (slave超时无应答)
+  .                          ||
+  .          token   ---->   ||
+  .                          ||
+  .                          vv
+  =========  master  =====  bus  =======  slave  =========
+  - 总线状态：
+  1. 空闲
+  2. 发送数据
+  3. 接收数据
+
+  - 触发master发送token的条件：(前提都是总线处于空闲状态）
+  1. 收到返回的token
+  2. token_timeout_counter 超时
 
 * bus_master
+- 驱动文件：bus.cpp, bus_master.cpp, bus_device.cpp
+- 对外数据结构说明：
+    - 总线事件类型和回调函数类型
+      #+BEGIN_SRC 
+      typedef enum {
+          BUS_DEVICE_ONLINE = 0,
+          BUS_DEVICE_OFFLINE,
+          BUS_DEVICE_DATA,
+      } Bus_event;
+      注: BUS_DEVICE_ONLINE，BUS_DEVICE_OFFLINE仅对Master设备有效
+      #+END_SRC
+    - 应用回调函数类型
+      #+BEGIN_SRC 
+      typedef void (Bus_event_callback)(Bus*, Bus_event, void*, void*);
+      #+END_SRC
+    - 总线Package结构
+      #+BEGIN_SRC 
+      typedef struct {
+          u8 src;
+          u8 dst;
+          Package_type type;
+          Package_data data;
+      } Package;
+
+      typedef enum {
+          PACKAGE_REQUEST,
+          PACKAGE_RESPONSE,
+          PACKAGE_MESSAGE,
+      } Package_type;
+
+      typedef union {
+          Package_request req;
+          Package_response res;
+          Package_message message;
+      } Package_data;
+
+      typedef struct {
+          u8    id;   
+          char *path;
+          char *param;
+          char *header;
+      } Package_request;
+
+     typedef struct {
+        u8    id;
+        u16   code;
+        char *header;
+        char *body;
+     } Package_response;
+
+     typedef struct {
+        char *body;
+     } Package_message;
+
+      #+END_SRC
+- 应用接口说明：
+    #+BEGIN_SRC 
+
+       Bus_device *bus_dev[BUS_DEV_MAX];
+       
+       //构造函数，指定父对像指针和名称
+       Bus_master(Task *parent, const char *name);
+
+       /*****************************************************************
+       *Function:    //函数名称
+       *Description: //函数功能，性能等的描述
+       *Input:       //输入参数说明，包括每个参数的作用、取值说明及参数间关系
+       *Output:      //输出参数的说明
+       *Return:      //函数返回值的说明
+       *****************************************************************/
+       i8 setup(u8 addr, u8 tx_pin, u8 rx_pin,
+             u8 rts_pin, u8 rts_on, u8 rts_off);
+
+    #+END_SRC
+- 使用方法：
+    #+BEGIN_SRC 
+        /* 1. 给应用编写总线事件处理函数 */
+        void panel_4008_on_bus_event(Bus *bus, Bus_event event, void* data, void *context)
+        {
+            ((Panel_4008*)context)->on_bus_event(bus, event, data);
+        };
+
+        /* 2. 编写总线事件回调函数 */
+        void panel_4008_on_bus_event(Bus *bus, Bus_event event, void* data, void *context)
+        {
+            ((Panel_4008*)context)->on_bus_event(bus, event, data);
+        };
+
+        /* 2. 创建Bus_master对像，初始化设置事件回调 */
+        bus = new Bus_master(&panel_4008 , "485-bus-master");
+        bus->setup('@', PIN_485_TX, PIN_485_RX,
+               PIN_485_RTS, RTS_TX_ON, RTS_TX_OFF);
+        bus->on_event(&panel_4008_on_bus_event, this);
+
+    #+END_SRC
 
 * bus_slave
+  - 驱动文件：bus.cpp, bus_slave.cpp
+    #+BEGIN_SRC 
+    
+    #+END_SRC
+  - 使用方法：
+    #+BEGIN_SRC 
+    
+    #+END_SRC
