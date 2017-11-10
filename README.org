@@ -33,16 +33,15 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
      Task *parent();                     //获取Task的父类
      const char *name();                 //获取Task名称
      void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer)
-     
      #+END_SRC
      #+END_QUOTE
    - 使用方法
-     1) 继承Task，构造方法必须指定父类和名称
-     2) 在setup方法中执行父类的setup方法，
-     3) override loop方法
+     1. 继承Task，构造方法必须指定父类和名称
+     2. 在setup方法中执行父类的setup方法，
+     3. override loop方法
    - 使用示例
-     
-   #+BEGIN_QUOTE
+#+BEGIN_EXAMPLE
+   #+BEGIN_SRC c
    //类定义
    class Bus: public Task {
      private:
@@ -66,7 +65,10 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
 
    //类使用
    bus = new Bus(&panel_4008, "485-bus-master");
+   #+END_SRC
 
+#+END_EXAMPLE
+   #+BEGIN_QUOTE
 #+END_QUOTE
    
 ** 1.2 Task_timer
