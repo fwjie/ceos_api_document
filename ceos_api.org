@@ -9,15 +9,6 @@ ceos提供Task，Task_timer，Hard_timer，Queue，List，Base64编码等功能�
 ** Task
 系统基本对像，每一个需要loop的模块都应该继承Task类。
 - 类定义 task.h
-- 提供方法:
-#+BEGIN_SRC 
-i8 running();                       //判断Task是否运行
-void pause();                       //挂起Task运行
-void resume();                      //恢复Task运行
-u16 pid();                          //获取task id
-Task *parent();                     //获取Task的父类
-const char *name();                 //获取Task名称
-void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer)
 #+END_SRC
 - 使用方法
 1. 继承Task，构造方法必须指定父类和名称
@@ -25,20 +16,23 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
 3. override loop方法
 - 使用示例
 #+BEGIN_SRC c
-   //类定义
+   //定义Bus类，继承Task类
    class Bus: public Task {
-     private:
-     public:
-       Bus(Task *parent, const char *name);
-       ~Bus();
+       private:
+       public:
+         Bus(Task *parent, const char *name);
+         ~Bus();
      
-       void setup();
-       void loop();
+         void setup();
+         void loop();
+
+         //other fucntions
    }
 
    //setup方法中执行父类的setup
    i8 Bus::setup() {
-     Task::setup();
+       Task::setup();
+       //other setup
    }
 
    //override loop
@@ -50,42 +44,47 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
    bus = new Bus(&panel_4008, "485-bus-master");
 #+END_SRC
 ** Task_timer
-   系统软件定时器，loop级别，非精准定时。
+   系统软件定时器，ms级别，非精准定时，必须在Task中使用。
    - 头文件: task.h
    - 使用接口
 #+BEGIN_SRC c
+//定时器模式
 typedef enum {
-    TIMER_RELOAD_MANUAL = 0,
-    TIMER_RELOAD_AUTO,
+    TIMER_RELOAD_MANUAL = 0,  //单次定时器
+    TIMER_RELOAD_AUTO,        //周期定时器
 } TIMER_RELOAD_MODE;
 
+/* 创建定时器,指定周期，所属对像指针 */
 Task_timer(i16 cnt, Task* _task);
+
+/* 创建定时器,指定名称，周期，所属对像指针*/
 Task_timer(const char *name, i16 cnt, Task* _task);
 
+/* 创建定时器,指定周期，定时器类型，所属对像指针 */
 Task_timer(i16 cnt, TIMER_RELOAD_MODE mode, Task* task);    
 
-void reload();
-void stop();
-u8 timeup();
-u8 running();
-u8 stoped();
+void reload();   //定时器时间重新加载
+void stop();     //停止定时器
+u8 timeup();     //判断定时时间到
+u8 running();    //判断定时器是否在运行
+u8 stoped();     //判断定时器是否停止
 #+END_SRC
    - 使用示例
-#+BEGIN_SRC 
-//Tasl_timer必须在Task类及其子类中创建
+#+BEGIN_SRC c
+//Tasl_timer必须在Task类及其子类中创建，传入所属对像this指针
 t_100ms      = new Task_timer(100, this);
-t_led_update = new Task_timer(500, this);
 
 //在Task的loop方法中判断定时时间是否到
 if (t_100ms->timeup()) {
     //do somethings
-    t_100ms->reload();
+    
+    t_100ms->reload();  //周期定时器，需手动重新加载定时时间
 }
 #+END_SRC
 
 ** Hard_timer
    系统硬件定时器，硬件中断级别，精准定时。
-   - 头文件: queue.h
+   - 头文件: hard_timer.h
    - 使用接口
 #+BEGIN_SRC c
 
@@ -100,7 +99,21 @@ if (t_100ms->timeup()) {
    - 头文件: queue.h
    - 使用接口
 #+BEGIN_SRC c
+    //queue类型
+    typedef Queue<u8> Byte_queue;
+    typedef Queue<void*> Void_queue;
 
+    Queue(u16 size);          //构造函数，指定队列容量
+
+    T shift();                //移出队首元素
+    T peek(i16 index);        //获取队列index处的元素,不出队
+    void push(T e);           //往队列中添加元素
+    T push(T e, u8 override); //往队列中添加元素，可指定队列满时是否覆盖
+    u8 empty();               //判断队列是否为空
+    u8 full();                //判断队列是否满
+    u8 space();               //返回队列的剩余容量
+    void reset();             //队列重置(清空内容)
+    u16 length();             //返回队列容量
 #+END_SRC
    - 使用示例
 #+BEGIN_SRC 
