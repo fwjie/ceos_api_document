@@ -6,15 +6,14 @@
 * Overview
   TObejct库，可单独使用，TObject对像即JSON对像，涉及文件：object.cpp, tparser.cpp
   - *特性*
-   * 清晰简洁的API接口，命名和使用皆贴近Linux平台用户习惯
+   * 清晰简洁的API接口
    * 支持JSON对像和字符串之间直接转换
    * 支持JSON对像成员的多级创建和获取
    * 合并创建JSON对像过程中多次申请的内存，一次释放
-   * 其它优异的特性(下面的例子)
 
 * 解析字符串为json对像
   - *头文件*: tparser.h
-  - *API接口*
+  - *API接口(常用)*
 #+BEGIN_SRC c
     TObject *parse_json(const char *code);    //解析字符串为TObject对像
 #+END_SRC
@@ -29,45 +28,30 @@
 #+END_SRC
 * json对像操作方法
   - *头文件*: tobject.h
-  - *API接口*
+  - *API接口(常用)*
 #+BEGIN_SRC c
-    TObject();
-    TObject(const char *value);
-    TObject(const T_BOOLEAN value, T_FLAGS flags);
-    TObject(const int value);
-    TObject(const int value, T_FLAGS flags);
-    TObject(const double value);
-    TObject(const double value, T_FLAGS flags);
-    TObject(const char *member_name, TObject  *value);
-    TObject(const char *member_name, TObject  *value, T_FLAGS flags);
+    TObject();                          //构造方法,创建JSON对像
 
-    void del(const char *member_name);
-    void del(const int index);
+    void del(const char *member_name);  //根据key删除成员
+    void del(const int index);          //根据索引删除成员(适用于数组对像)
 
-    char* type_name();
-    char* to_string(const char *path);
+    char* to_string(const char *path);  
     char* to_string();
-    char* to_string(T_FLAGS flags);
-    char to_char();
+    char  to_char();
     long  to_int();
     T_BOOLEAN to_bool();
     double to_float();
 
-
-    TObject *new_member(const char *name);
+    TObject *new_member(const char *name); //添加成员变量
     TObject *new_member(const char *path, Name_mode mode);
 
-    int member_count();
-    char *member_name(int index);
-    TObject *member(int index);
+    int member_count();              //数组对像的成员数量
+    TObject *member(int index);      //根据下标获取数组元素
 
-    int has_member(const char *name);
-    int has_member(const char *name, OBJECT_TYPE type);
-    int has_member(const char *path, OBJECT_TYPE type, Name_mode mode);
-
+    int has_member(const char *name);//根据key判断是否包含成员
 #+END_SRC
   - *使用示例*
--1. 创建JSON对像，并转化为字符串
+- 1. 创建JSON对像，并转化为字符串
 #+BEGIN_SRC c
     TObject *userinfo = new TObject();              /* new 一个JSON对像 */
     userinfo->new_member("name")->set("xiao ming"); /* new_member方法用来添加JSON对像成员 */
@@ -87,7 +71,7 @@
     skill->new_member("C")->set(true);
     skill->new_member("Java")->set(true);
     skill->new_member("Javascript")->set(true);
-    skill->new_member("shell")->set(false);
+    skill->new_member("PHP")->set(false);
 
     /* member("key")可以直接获取对像成员 */
     printf("%s\n", userinfo->member("name")->to_string());
@@ -123,7 +107,6 @@
     printf("%s\n", userinfo->to_string());
     delete userinfo;
 #+END_SRC
-
 - 4. JSON对像数组的操作
 #+BEGIN_SRC c
     TObject *userinfos = new TObject();
@@ -151,3 +134,11 @@
 
     delete userinfos;                                       /* delete最外层的JSON对像即可删除所有的动态申请的内存 */
 #+END_SRC
+- 5. 补充说明
+#+BEGIN_QUOTE
+member()方法可以按key获取成员，也可以按编号获取成员
+del方法可以按key删除成员，也可以按编号删除成员
+set方法具有重载特性，可以赋值C语言中的基本的数据类型变量
+to_xxx方法可以将成员直接转换为 目标数据类型
+可以使用to_string("xxx")直接获取string类型的对像成员数值
+#+END_QUOTE

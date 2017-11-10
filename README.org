@@ -70,8 +70,6 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
    
 ** Task_timer
 系统软件定时器，loop级别，非精准定时。
-   
-   
 
 ** Hard_timer
    系统硬件定时器，硬件中断级别，精准定时。
@@ -83,36 +81,35 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
    链表
 
 ** JSON lib
-   JSON操作库，可以解析字符串为Json Ojbect，也可以创建Json Object，再序列化为字符串。
+   TObject操作库，具体参见：
    [[Json_lib.org]]
 *** json parser
     字符串解析为Json Object
-    
 *** json object method
     Json对像操作方法，并序列化为字符串
   
-* 2 File System and Simple Database
+* File System and Simple Database
 
-** 2.1 loop
-** 2.2 File
-** 2.3 Dir
+** loop
+** File
+** Dir
 
-* 3 Bus
+* Bus
 
-** 3.1 Bus master
+** Bus master
    总线主设备驱动
 
-** 3.2 Bus slave
+** Bus slave
    总线从设备驱动
   
-* 4 Net
-** 4.1 Enthernet
+* Net
+** Enthernet
    W5500有线网络驱动
 
-** 4.2 GPRS & 4G
+** GPRS & 4G
    
-** 4.3 DHCP Client
+** DHCP Client
 
-** 4.4 DNS Client
+** DNS Client
 
-* 5 Http Server
+* Http Server
