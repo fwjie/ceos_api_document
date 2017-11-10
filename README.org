@@ -21,65 +21,20 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
 
 * Conwin Embed Operaing System 
 ** Task
-系统基本对像，每一个需要loop的模块都应该继承Task类。
-- 类定义 task.h
-- 提供方法:
-#+BEGIN_QUOTE
-#+BEGIN_SRC 
-i8 running();                       //判断Task是否运行
-void pause();                       //挂起Task运行
-void resume();                      //恢复Task运行
-u16 pid();                          //获取task id
-Task *parent();                     //获取Task的父类
-const char *name();                 //获取Task名称
-void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer)
-#+END_SRC
-#+END_QUOTE
-- 使用方法
-1. 继承Task，构造方法必须指定父类和名称
-2. 在setup方法中执行父类的setup方法，
-3. override loop方法
-- 使用示例
-#+BEGIN_QUOTE
-#+BEGIN_SRC c
-   //类定义
-   class Bus: public Task {
-     private:
-     public:
-       Bus(Task *parent, const char *name);
-       ~Bus();
-     
-       void setup();
-       void loop();
-   }
-
-   //setup方法中执行父类的setup
-   i8 Bus::setup() {
-     Task::setup();
-   }
-
-   //override loop
-   void Bus::loop() {
-   
-   }
-
-   //类使用
-   bus = new Bus(&panel_4008, "485-bus-master");
-#+END_SRC
-#+END_QUOTE
-   
+   任务，提供系统任务执行接口封装
+   具体参见：[[ceos_api.org]]
 ** Task_timer
-系统软件定时器，loop级别，非精准定时。
-
+   系统软件定时器，loop级别，非精准定时。
+   具体参见：[[ceos_api.org]]
 ** Hard_timer
    系统硬件定时器，硬件中断级别，精准定时。
-
+   具体参见：[[ceos_api.org]]
 ** Queue
-   循环对像，提供以字节为单位的队列类型和以void *为单位的队列类型。
-   
+   循环对列，提供以字节为单位的队列类型和以void *为单位的队列类型。
+   具体参见：[[ceos_api.org]]
 ** List
    链表
-
+   具体参见：[[ceos_api.org]]
 ** JSON lib
    TObject操作库，具体参见：
    [[Json_lib.org]]
@@ -97,19 +52,14 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
 * Bus
   总线协议参见：[[bus_protocol.org]]
 ** Bus master
-   总线主设备驱动
-
+   总线主设备驱动，参见: [[bus_api.org]]
 ** Bus slave
-   总线从设备驱动
+   总线从设备驱动，参见: [[bus_api.org]]
   
 * Net
 ** Enthernet
    W5500有线网络驱动
-
 ** GPRS & 4G
-   
 ** DHCP Client
-
 ** DNS Client
-
 * Http Server

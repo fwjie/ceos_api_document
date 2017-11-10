@@ -1,10 +1,10 @@
 #+OPTIONS: ^:{}
 
-#+TITLE: Conwin Embed OS JSON Lib API & Guide
+#+TITLE: JSON Lib API & Guide
 #+AUTHOR: fanwenjie
 
 * Overview
-  TObejct库，可单独使用，TObject对像即JSON对像，涉及文件：object.cpp, tparser.cpp
+  JSON Lib即TObejct库，可单独使用，TObject对像即JSON对像，涉及文件：tobject.cpp, tparser.cpp
   - *特性*
    * 清晰简洁的API接口
    * 支持JSON对像和字符串之间直接转换

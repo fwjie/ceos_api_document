@@ -1,0 +1,45 @@
+#+OPTIONS: ^:{}
+
+#+TITLE: Conwin Bus API
+#+AUTHOR: fanwenjie
+
+* Overview
+
+
+* 解析字符串为json对像
+  - *头文件*: tparser.h
+  - *API接口(常用)*
+#+BEGIN_SRC c
+
+#+END_SRC
+  - *使用示例*
+#+BEGIN_SRC c
+
+#+END_SRC
+* json对像操作方法
+  - *头文件*: tobject.h
+  - *API接口(常用)*
+#+BEGIN_SRC c
+
+#+END_SRC
+  - *使用示例*
+- 1. 创建JSON对像，并转化为字符串
+#+BEGIN_SRC c
+
+#+END_SRC
+- 2. 创建嵌套JSON对像，获取对像成员数值
+#+BEGIN_SRC c
+
+#+END_SRC
+- 3. 删除JSON对像成员，对像成员直接赋值另一个JSON对像
+#+BEGIN_SRC c
+
+#+END_SRC
+- 4. JSON对像数组的操作
+#+BEGIN_SRC c
+
+#+END_SRC
+- 5. 补充说明
+#+BEGIN_QUOTE
+
+#+END_QUOTE
