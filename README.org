@@ -22,9 +22,47 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
 * 1 Conwin Embed Operaing System 
 ** 1.1 Task
    系统基本对像，每一个需要loop的模块都应该继承Task类。
+   - 类定义 task.h
+   - 提供方法:
+     #+BEGIN_SRC 
+     i8 running();                       //判断Task是否运行
+     void pause();                       //挂起Task运行
+     void resume();                      //恢复Task运行
+     u16 pid();                          //获取task id
+     Task *parent();                     //获取Task的父类
+     const char *name();                 //获取Task名称
+     void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer)
+     
+     #+END_SRC
+   - 使用方法
+     -- 1. 继承Task，构造方法必须指定父类和名称
+     -- 2. 在setup方法中执行父类的setup方法，
+     -- 3. override loop方法
+   - 使用示例
    #+BEGIN_SRC c++
-   typedef vector<Task*> Task_list
-   task_list.push_back(this);
+   //类定义
+   class Bus: public Task {
+     private:
+     public:
+       Bus(Task *parent, const char *name);
+       ~Bus();
+     
+       void setup();
+       void loop();
+   }
+
+   //setup方法中执行父类的setup
+   i8 Bus::setup() {
+     Task::setup();
+   }
+
+   //override loop
+   void Bus::loop() {
+   
+   }
+
+   //类使用
+   bus = new Bus(&panel_4008, "485-bus-master");
    #+END_SRC
    
 ** 1.2 Task_timer
