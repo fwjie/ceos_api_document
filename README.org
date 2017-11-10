@@ -4,9 +4,14 @@
 #+AUTHOR: fanwenjie
 
 * Overview
-conwin embed os是一个采用分时调度方法的操作系统，它的目标是简化应用程序的编写，增强程序的可读性和可维护性。
+#+BEGIN_QUOTE
+conwin embed os采用分时调度方法，它的目标是简化应用程序的编写，增强程序的可读性和可维护性。
+#+END_QUOTE
+#+BEGIN_QUOTE
 ceos的基本元素为Task，过去编写程序时，每个模块都有一个loop，再把所有的loop放到主程序的loop中，所有的loop依次执行。使用ceos框架，
-每个模块只需要继承Task类，override loop方法即可，在loop中执行本模块的逻辑功能
+每个模块只需要继承Task类，override loop方法即可，在loop中执行本模块的逻辑功能。
+#+END_QUOTE
+
 *使用ceos的一些约定*
 - 数据类型请采用typedef.h中的定义
 - 代码中变量，函数的命名采用全小写加下划线方式，统一风格
