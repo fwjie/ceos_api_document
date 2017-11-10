@@ -84,7 +84,7 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
 
 ** JSON lib
    JSON操作库，可以解析字符串为Json Ojbect，也可以创建Json Object，再序列化为字符串。
-   [[ceos.org]]
+   [[Json_lib.org]]
 *** json parser
     字符串解析为Json Object
     
