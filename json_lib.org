@@ -6,11 +6,11 @@
 * Overview
   TObejct库，可单独使用，TObject对像即JSON对像，涉及文件：object.cpp, tparser.cpp
   - *特性*
-   - 清晰简洁的API接口，命名和使用皆贴近Linux平台用户习惯
-   - 支持JSON对像和字符串之间直接转换
-   - 支持JSON对像成员的多级创建和获取
-   - 合并创建JSON对像过程中多次申请的内存，一次释放
-   - 其它优异的特性(下面的例子)
+   * 清晰简洁的API接口，命名和使用皆贴近Linux平台用户习惯
+   * 支持JSON对像和字符串之间直接转换
+   * 支持JSON对像成员的多级创建和获取
+   * 合并创建JSON对像过程中多次申请的内存，一次释放
+   * 其它优异的特性(下面的例子)
 
 * 解析字符串为json对像
   - *头文件*: tparser.h
@@ -69,17 +69,84 @@
   - *使用示例*
 1. 创建JSON对像，并转化为字符串
 #+BEGIN_SRC 
+TObject *userinfo = new TObject();              /* new 一个JSON对像 */
+userinfo->new_member("name")->set("xiao ming"); /* new_member方法用来添加JSON对像成员 */
+userinfo->new_member("age")->set(30);           /* set方法给对像成员赋值，set方法具有重载特性 */
 
+printf("%s\n", userinfo->to_string());          /* to_string()方法来将JSON对像转化为字符串 */
+delete userinfo;                                /* new 得到的对像使用完毕需要delete掉 */
 #+END_SRC
 2. 创建嵌套JSON对像，获取对像成员数值
 #+BEGIN_SRC 
+TObject *userinfo = new TObject();
+userinfo->new_member("name")->set("xiao ming");
+userinfo->new_member("age")->set(30);
 
+/* 如果JSON对像成员也是一个JSON对像，按下面的方法使用，可以多级嵌套创建 */
+TObject *skill = userinfo->new_member("skill"); 
+skill->new_member("C")->set(true);
+skill->new_member("Java")->set(true);
+skill->new_member("Javascript")->set(true);
+skill->new_member("shell")->set(false);
+
+/* member("key")可以直接获取对像成员 */
+printf("%s\n", userinfo->member("name")->to_string());
+printf("%d\n", userinfo->member("age")->to_int());
+
+/* member("key1.key2.key3")可以直接获取嵌套对像成员 */
+printf("%d\n", userinfo->member("skill.Java")->to_bool());
+printf("%d\n", userinfo->member("skill.shell")->to_bool());
+
+printf("%s\n", userinfo->to_string());
+delete userinfo;
 #+END_SRC
 3. 删除JSON对像成员，对像成员直接赋值另一个JSON对像
 #+BEGIN_SRC 
+TObject *userinfo = new TObject();
+userinfo->new_member("name")->set("xiao ming");
+userinfo->new_member("age")->set(30);
+userinfo->new_member("address")->set("shen zhen");
 
+/* 新建一个JSON对像 */
+TObject *skill = new TObject();
+skill->new_member("C")->set(true);
+skill->new_member("Java")->set(true);
+skill->new_member("Javascript")->set(true);
+skill->new_member("shell")->set(false);
+
+/* 通过assign方法来给JSON对像成员直接赋于另一个JSON对像 */
+userinfo->new_member("skill")->assign(skill);
+
+/* 通过del方法来删除对像成员 */
+userinfo->del("address");
+
+printf("%s\n", userinfo->to_string());
+delete userinfo;
 #+END_SRC
 4. JSON对像数组的操作
 #+BEGIN_SRC 
+TObject *userinfos = new TObject();
 
+/* 创建10个JSON对像，并通过push方法组成对像数据 */
+for (int i = 1; i <= 10; i ++) {
+    TObject *userinfo = new TObject();
+    userinfo->new_member("id")->set(i);
+    userinfo->new_member("name")->set("XXX");
+    userinfo->new_member("age")->set(30);
+
+    /* push方法 */
+    userinfos->push(userinfo);
+}   
+
+printf("%s\n", userinfos->to_string());
+
+/* 通过member_cnt()方法遍历JSON对像数组, 并获取相应的成员 */
+for (int i = 0; i < userinfos->member_cnt(); i ++) {
+    TObject *userinfo = userinfos->member(i);           /*member(int)函数按编号取数组成员 */
+    int id = userinfo->member("id")->to_int();          /* to_int方法把对像成员的值转换为int类型 */
+    char *name = userinfo->member("name")->to_string(); /* to_string方法把对像成员的值转化为string类型 */
+    int    age = userinfo->member("age")->to_int(); 
+}
+
+delete userinfos;                                       /* delete最外层的JSON对像即可删除所有的动态申请的内存 */
 #+END_SRC
