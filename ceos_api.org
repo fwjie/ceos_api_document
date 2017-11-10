@@ -93,15 +93,14 @@ if (t_100ms->timeup()) {
 #+BEGIN_SRC 
 
 #+END_SRC
-
 ** Queue
    循环对像，提供以字节为单位的队列类型和以void *为单位的队列类型。
    - 头文件: queue.h
    - 使用接口
 #+BEGIN_SRC c
     //queue类型
-    typedef Queue<u8> Byte_queue;
-    typedef Queue<void*> Void_queue;
+    typedef Queue<u8> Byte_queue;     //字节队列
+    typedef Queue<void*> Void_queue;  //指针队列(适用于缓存数据包)
 
     Queue(u16 size);          //构造函数，指定队列容量
 
@@ -117,7 +116,14 @@ if (t_100ms->timeup()) {
 #+END_SRC
    - 使用示例
 #+BEGIN_SRC 
+    tx_fifo    = new Byte_queue(TX_FIFO_SIZE);  //创建发送队列
+    rx_fifo    = new Byte_queue(RX_FIFO_SIZE);  //创建接收队列
+    send_queue = new Void_queue(PACKAGE_QUEUE_LEN); //创建数据包队列
 
+    tx_fifo->push(data);                        //数据入队
+    if (!rx_fifo->empty()) {                  
+        u8 ch = rx_fifo->shift();               //数据出队
+    }
 #+END_SRC
 ** List
    链表
@@ -130,12 +136,14 @@ if (t_100ms->timeup()) {
 #+BEGIN_SRC 
 
 #+END_SRC
-
 ** Base64编解码
    - 头文件: base.h
    - 使用接口
 #+BEGIN_SRC c
-
+ //字符串进行base64编码
+ int base64_encode(char *output, const char *input, int inputLen);
+ //base64编码字符串解码为原始串
+ int base64_decode(char *output, char *input, int inputLen);
 #+END_SRC
    - 使用示例
 #+BEGIN_SRC 
