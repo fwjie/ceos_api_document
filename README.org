@@ -35,10 +35,12 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
      
      #+END_SRC
    - 使用方法
-     -- 1. 继承Task，构造方法必须指定父类和名称
-     -- 2. 在setup方法中执行父类的setup方法，
-     -- 3. override loop方法
+     1) 继承Task，构造方法必须指定父类和名称
+     2) 在setup方法中执行父类的setup方法，
+     3) override loop方法
    - 使用示例
+     
+#+BEGIN_QUOTE
    #+BEGIN_SRC c++
    //类定义
    class Bus: public Task {
@@ -64,6 +66,7 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
    //类使用
    bus = new Bus(&panel_4008, "485-bus-master");
    #+END_SRC
+#+END_QUOTE
    
 ** 1.2 Task_timer
    系统软件定时器，loop级别，非精准定时。
