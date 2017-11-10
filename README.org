@@ -36,13 +36,8 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
    链表
    具体参见：[[ceos_api.org]]
 ** JSON lib
-   TObject操作库，具体参见：
-   [[Json_lib.org]]
-*** json parser
-    字符串解析为Json Object
-*** json object method
-    Json对像操作方法，并序列化为字符串
-  
+   TObject库，提供JSON对像操作方法，以及和字符串之间的相互转换，具体参见：
+   [[json_lib.org]]
 * File System and Simple Database
 
 ** loop
