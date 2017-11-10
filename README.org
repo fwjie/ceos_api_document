@@ -19,8 +19,8 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
 - 模块和驱动程序之间采用函数直接调用的方式，但模块之间的操作尽量采用回调的方式以降低耦合度
 #+END_QUOTE
 
-* 1 Conwin Embed Operaing System 
-** 1.1 Task
+* Conwin Embed Operaing System 
+** Task
 系统基本对像，每一个需要loop的模块都应该继承Task类。
 - 类定义 task.h
 - 提供方法:
@@ -68,27 +68,27 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
 #+END_SRC
 #+END_QUOTE
    
-** 1.2 Task_timer
+** Task_timer
 系统软件定时器，loop级别，非精准定时。
-   t
+   
    
 
-** 1.3 Hard_timer
+** Hard_timer
    系统硬件定时器，硬件中断级别，精准定时。
 
-** 1.4 Queue
+** Queue
    循环对像，提供以字节为单位的队列类型和以void *为单位的队列类型。
    
-** 1.5 List
+** List
    链表
 
-** 1.6 JSON lib
+** JSON lib
    JSON操作库，可以解析字符串为Json Ojbect，也可以创建Json Object，再序列化为字符串。
-
-*** 6.1 json parser
+   [[ceos.org]]
+*** json parser
     字符串解析为Json Object
-
-*** 6.2 json object method
+    
+*** json object method
     Json对像操作方法，并序列化为字符串
   
 * 2 File System and Simple Database
