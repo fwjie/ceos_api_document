@@ -4,9 +4,7 @@
 #+AUTHOR: fanwenjie
 
 * Overview
-  即TObejct库，TObject对像即JSON对像
-
-  - 文件：object.cpp, tparser.cpp
+  TObejct库，可单独使用，TObject对像即JSON对像，涉及文件：object.cpp, tparser.cpp
   *特性*
    - 清晰简洁的API接口，命名和使用皆贴近Linux平台用户习惯
    - 支持JSON对像和字符串之间直接转换
@@ -15,23 +13,23 @@
    - 其它优异的特性(下面的例子)
 
 * 解析字符串为json对像
-  - 文件: tparser.h tparser.cpp
-  - API接口
+  - *头文件*: tparser.h
+  - *API接口*
 #+BEGIN_SRC c
     TObject *parse_json(const char *code);    //解析字符串为TObject对像
 #+END_SRC
-  - 使用示例
+  - *使用示例*
 #+BEGIN_SRC c
     char *buf    = "{name:\"xxxx\", age:30}"; /* JSON格式字符串 */
     TObject *obj = parse_json(buf);           /* 字符串转换为对像，parse失败则返回NULL */
     if (obj) {
-      printf("%s\n", obj->to_string());
-      delete obj;                           /* parse_json获得的JSON对像需要delete */
+        printf("%s\n", obj->to_string());
+        delete obj;                           /* parse_json获得的JSON对像需要delete */
     }
 #+END_SRC
-  
 * json对像操作方法
-  - API接口
+  - *头文件*: tobject.h
+  - *API接口*
 #+BEGIN_SRC c
     TObject();
     TObject(const char *value);
@@ -68,7 +66,7 @@
     int has_member(const char *path, OBJECT_TYPE type, Name_mode mode);
 
 #+END_SRC
-  - 使用示例
+  - *使用示例*
 1. 创建JSON对像，并转化为字符串
 #+BEGIN_SRC 
 
