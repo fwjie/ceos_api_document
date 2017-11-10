@@ -1,21 +1,73 @@
+#+OPTIONS: ^:{}
+
 #+TITLE: CEOS API Document
 #+AUTHOR: fanwenjie
 
 * Overview
 #+BEGIN_QUOTE
 conwin embed os是一个采用分时调度方法的操作系统，它的目标是简化应用程序的编写，增强程序的可读性和可维护性。
+#+END_QUOTE
+#+BEGIN_QUOTE
 ceos的基本元素为Task，过去编写程序时，每个模块都有一个loop，再把所有的loop放到主程序的loop中，所有的loop依次执行。使用ceos框架，
 每个模块只需要继承Task类，override loop方法即可，在loop中执行本模块的逻辑功能。
 #+END_QUOTE
 #+BEGIN_QUOTE
+  *使用ceos的一些约定*
+- 数据类型请采用typedef.h中的定义
+- 代码中变量，函数的命名采用全小写加下划线方式，统一风格
+- 模块内的while循环无阻塞且尽可能的短
+- 模块和驱动程序之间采用函数直接调用的方式，但模块之间的操作尽量采用回调的方式以降低耦合度
 #+END_QUOTE
 
-* Conwin Embed Operaing System
+* Conwin Embed Operaing System 
+** Task
+   系统基本对像，每一个需要loop的模块都应该继承Task类。
+   
 
+** Task_timer
+   系统软件定时器，loop级别，非精准定时。
+
+** Hard_timer
+   系统硬件定时器，硬件中断级别，精准定时。
+
+** Queue
+   循环对像，提供以字节为单位的队列类型和以void *为单位的队列类型。
+   
+
+
+** List
+   链表
+
+
+** JSON lib
+   JSON操作库，可以解析字符串为Json Ojbect，也可以创建Json Object，再序列化为字符串。
+
+
+*** json parser
+    字符串解析为Json Object
+
+*** json object method
+
+
+  
 * File System and Simple Database
 
-* Bus
 
+* Bus
+** Bus master
+   总线主设备驱动
+
+** Bus slave
+   总线从设备驱动
+  
 * Net
+** Enthernet
+   W5500有线网络驱动
+
+** GPRS & 4G
+   
+** DHCP Client
+
+** DNS Client
 
 * Http Server
