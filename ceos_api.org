@@ -4,13 +4,12 @@
 #+AUTHOR: fanwenjie
 
 * Overview
-  ceos提供Task，Task_timer，Hard_timer，Queue，List，Base64编码等功能。
+ceos提供Task，Task_timer，Hard_timer，Queue，List，Base64编码等功能。
 * API Interface 
 ** Task
 系统基本对像，每一个需要loop的模块都应该继承Task类。
 - 类定义 task.h
 - 提供方法:
-#+BEGIN_QUOTE
 #+BEGIN_SRC 
 i8 running();                       //判断Task是否运行
 void pause();                       //挂起Task运行
@@ -20,13 +19,11 @@ Task *parent();                     //获取Task的父类
 const char *name();                 //获取Task名称
 void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer)
 #+END_SRC
-#+END_QUOTE
 - 使用方法
 1. 继承Task，构造方法必须指定父类和名称
 2. 在setup方法中执行父类的setup方法，
 3. override loop方法
 - 使用示例
-#+BEGIN_QUOTE
 #+BEGIN_SRC c
    //类定义
    class Bus: public Task {
@@ -52,18 +49,38 @@ void push_timer(Task_timer *timer); //给Task增加timer(具体见1.2 Task_timer
    //类使用
    bus = new Bus(&panel_4008, "485-bus-master");
 #+END_SRC
-#+END_QUOTE
-   
 ** Task_timer
    系统软件定时器，loop级别，非精准定时。
-   - 头文件: queue.h
+   - 头文件: task.h
    - 使用接口
 #+BEGIN_SRC c
+typedef enum {
+    TIMER_RELOAD_MANUAL = 0,
+    TIMER_RELOAD_AUTO,
+} TIMER_RELOAD_MODE;
 
+Task_timer(i16 cnt, Task* _task);
+Task_timer(const char *name, i16 cnt, Task* _task);
+
+Task_timer(i16 cnt, TIMER_RELOAD_MODE mode, Task* task);    
+
+void reload();
+void stop();
+u8 timeup();
+u8 running();
+u8 stoped();
 #+END_SRC
    - 使用示例
 #+BEGIN_SRC 
+//Tasl_timer必须在Task类及其子类中创建
+t_100ms      = new Task_timer(100, this);
+t_led_update = new Task_timer(500, this);
 
+//在Task的loop方法中判断定时时间是否到
+if (t_100ms->timeup()) {
+    //do somethings
+    t_100ms->reload();
+}
 #+END_SRC
 
 ** Hard_timer

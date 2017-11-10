@@ -21,36 +21,30 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
 
 * Conwin Embed Operaing System 
 ** Task
-   任务，提供系统任务执行接口封装
-   具体参见：[[ceos_api.org]]
+提供系统任务执行接口
+具体参见：[[ceos_api.org][ceos系统API]]
 ** Task_timer
-   系统软件定时器，loop级别，非精准定时。
-   具体参见：[[ceos_api.org]]
+系统软件定时器，loop级别，非精准定时。
+具体参见：[[ceos_api.org][ceos系统API]]
 ** Hard_timer
-   系统硬件定时器，硬件中断级别，精准定时。
-   具体参见：[[ceos_api.org]]
+系统硬件定时器，硬件中断级别，精准定时。
+具体参见：[[ceos_api.org][ceos系统API]]
 ** Queue
-   循环对列，提供以字节为单位的队列类型和以void *为单位的队列类型。
-   具体参见：[[ceos_api.org]]
+循环对列，提供以字节为单位的队列类型和以void *为单位的队列类型。
+具体参见：[[ceos_api.org][ceos系统API]]
 ** List
-   链表
-   具体参见：[[ceos_api.org]]
+通用链表操作，具体参见：[[ceos_api.org][ceos系统API]]
 ** JSON lib
-   TObject库，提供JSON对像操作方法，以及和字符串之间的相互转换，具体参见：
-   [[json_lib.org]]
+TObject库，提供JSON对像操作方法，以及和字符串之间的相互转换。
+具体参见：[[json_lib.org][JSON库使用方法]]
 * File System and Simple Database
-
 ** loop
 ** File
 ** Dir
 
 * Bus
-  总线协议参见：[[bus_protocol.org]]
-** Bus master
-   总线主设备驱动，参见: [[bus_api.org]]
-** Bus slave
-   总线从设备驱动，参见: [[bus_api.org]]
-  
+总线协议参见：[[bus_protocol.org][丛文设备总线协议文档]]
+bus分为master和slave，api参见：[[bus_api.org][bus驱动API]]
 * Net
 ** Enthernet
    W5500有线网络驱动
