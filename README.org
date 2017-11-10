@@ -43,7 +43,6 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
    - 使用示例
      
    #+BEGIN_QUOTE
-   #+BEGIN_SRC c
    //类定义
    class Bus: public Task {
      private:
@@ -67,7 +66,7 @@ ceos的基本元素为Task，过去编写程序时，每个模块都有一个loo
 
    //类使用
    bus = new Bus(&panel_4008, "485-bus-master");
-   #+END_SRC
+
 #+END_QUOTE
    
 ** 1.2 Task_timer
