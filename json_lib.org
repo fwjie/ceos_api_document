@@ -5,7 +5,7 @@
 
 * Overview
   TObejct库，可单独使用，TObject对像即JSON对像，涉及文件：object.cpp, tparser.cpp
-  *特性*
+  - *特性*
    - 清晰简洁的API接口，命名和使用皆贴近Linux平台用户习惯
    - 支持JSON对像和字符串之间直接转换
    - 支持JSON对像成员的多级创建和获取
