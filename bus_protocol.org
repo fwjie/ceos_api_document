@@ -55,20 +55,18 @@
 
 ** CRC16计算方法
 #+BEGIN_SRC c
-unsigned short crc16(const void *data, unsigned short sizeInByte)
-{
-    unsigned short crc=0;
-    unsigned char *p = (unsigned char *)data;
+  unsigned short crc16(const void *data, unsigned short sizeInByte)
+  {
+      unsigned short crc=0;
+      unsigned char *p = (unsigned char *)data;
 
-    while (sizeInByte--)
-    {
-        unsigned char i;
-        crc ^= *p++;
-        for (i = 0; i<8; i++) 
-        {
-            crc = (crc >> 1) ^ ((crc & 0x01) ? 0xA001 : 0);
-        }
-    }
-    return crc;
-}
+      while (sizeInByte--) {
+          unsigned char i;
+          crc ^= *p++;
+          for (i = 0; i<8; i++) {
+              crc = (crc >> 1) ^ ((crc & 0x01) ? 0xA001 : 0);
+          }
+      }
+      return crc;
+  }
 #+END_SRC

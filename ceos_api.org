@@ -4,50 +4,51 @@
 #+AUTHOR: fanwenjie
 
 * Overview
-ceos提供Task，Task_timer，Hard_timer，Queue，List，Base64编码等功能。
+  ceos提供Task，Task_timer，Hard_timer，Queue，List，Base64编码等功能。
 * API Interface 
 ** Task
 系统基本对像，每一个需要loop的模块都应该继承Task类。
 - 类定义 task.h
-#+END_SRC
 - 使用方法
+#+BEGIN_QUOTE
 1. 继承Task，构造方法必须指定父类和名称
 2. 在setup方法中执行父类的setup方法，
 3. override loop方法
+#+END_QUOTE
 - 使用示例
 #+BEGIN_SRC c
-   //定义Bus类，继承Task类
-   class Bus: public Task {
-       private:
-       public:
-         Bus(Task *parent, const char *name);
-         ~Bus();
-     
-         void setup();
-         void loop();
+  //定义Bus类，继承Task类
+  class Bus: public Task {
+   private:
+   public:
+      Bus(Task *parent, const char *name);
+      ~Bus();
+    
+      void setup();
+      void loop();
 
-         //other fucntions
-   }
+      //other fucntions
+  }
 
-   //setup方法中执行父类的setup
-   i8 Bus::setup() {
-       Task::setup();
-       //other setup
-   }
+  //setup方法中执行父类的setup
+  i8 Bus::setup() {
+      Task::setup();
+      //other setup
+  }
 
-   //override loop
-   void Bus::loop() {
-   
-   }
+  //override loop
+  void Bus::loop() {
 
-   //类使用
-   bus = new Bus(&panel_4008, "485-bus-master");
+  }
+
+  //类使用
+  bus = new Bus(&panel_4008, "485-bus-master");
 #+END_SRC
 ** Task_timer
-   系统软件定时器，ms级别，非精准定时，必须在Task中使用。
+系统软件定时器，ms级别，非精准定时，必须在Task中使用。
    - 头文件: task.h
    - 使用接口
-#+BEGIN_SRC c
+   #+BEGIN_SRC c
 //定时器模式
 typedef enum {
     TIMER_RELOAD_MANUAL = 0,  //单次定时器
@@ -68,7 +69,7 @@ void stop();     //停止定时器
 u8 timeup();     //判断定时时间到
 u8 running();    //判断定时器是否在运行
 u8 stoped();     //判断定时器是否停止
-#+END_SRC
+   #+END_SRC
    - 使用示例
 #+BEGIN_SRC c
 //Tasl_timer必须在Task类及其子类中创建，传入所属对像this指针
@@ -81,7 +82,7 @@ if (t_100ms->timeup()) {
     t_100ms->reload();  //周期定时器，需手动重新加载定时时间
 }
 #+END_SRC
-
+   
 ** Hard_timer
    系统硬件定时器，硬件中断级别，精准定时。
    - 头文件: hard_timer.h
@@ -155,15 +156,15 @@ if (t_100ms->timeup()) {
 ** Base64编解码
    - 头文件: base.h
    - 使用接口
-#+BEGIN_SRC c
+   #+BEGIN_SRC c
  //字符串进行base64编码
  int base64_encode(char *output, const char *input, int inputLen);
  //base64编码字符串解码为原始串
  int base64_decode(char *output, char *input, int inputLen);
 #+END_SRC
    - 使用示例
-#+BEGIN_SRC 
+   #+BEGIN_SRC 
 
-#+END_SRC
-
-
+   #+END_SRC
+   
+   
